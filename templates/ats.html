@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Lora', serif;
+            color: #fff;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .background-blur {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("{{ url_for('static', filename='workspace.jpg') }}") no-repeat center center fixed;
+            background-size: cover;
+            filter: blur(5px);
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 5rem auto;
+            padding: 2.5rem;
+            background-color: #542e1c;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(8px);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #fff;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .section {
+            margin-bottom: 2rem;
+        }
+
+        .section h2 {
+            font-size: 1.4rem;
+            margin-bottom: 0.8rem;
+            color: #ffe6cc;
+        }
+
+        .section p {
+            font-size: 1rem;
+            background-color: #efebe9;
+            padding: 1rem;
+            border-radius: 10px;
+            line-height: 1.6;
+            color: #3e2723;
+        }
+
+        .section ul {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+            background-color: #efebe9;
+            border-radius: 10px;
+            padding: 1rem;
+            color: #3e2723;
+        }
+
+        .section ul li {
+            margin-bottom: 0.6rem;
+            font-size: 1rem;
+        }
+
+        .button-86 {
+            font-family: 'Lora', serif;
+            font-size: 16px;
+            background: transparent;
+            border: none;
+            position: relative;
+            color: #fff;
+            cursor: pointer;
+            z-index: 10;
+            padding: 12px 24px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            border-radius: 10px;
+        }
+
+        .button-86::after,
+        .button-86::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            z-index: -1;
+            transition: all 0.4s;
+        }
+
+        .button-86::before {
+            transform: translate(0%, 0%);
+            width: 100%;
+            height: 100%;
+            background: #1a1a1a;
+            border-radius: 10px;
+        }
+
+        .button-86::after {
+            transform: translate(10px, 10px);
+            width: 35px;
+            height: 35px;
+            background: #ffffff15;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border-radius: 50px;
+        }
+
+        .button-86:hover::before {
+            transform: translate(5%, 20%);
+            width: 110%;
+            height: 110%;
+        }
+
+        .button-86:hover::after {
+            border-radius: 10px;
+            transform: translate(0, 0);
+            width: 100%;
+            height: 100%;
+        }
+
+        .button-86:active::after {
+            transition: 0s;
+            transform: translate(0, 5%);
+        }
+
+        footer {
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            color: #eee;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Blur -->
+    <div class="background-blur"></div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1>{{ title }}</h1>
+
+        <div class="section">
+            <h2>ATS Score</h2>
+            <p>
+                {{ feedback.split('Strong Points:')[0].replace('ATS Score:', '').strip() }}
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>Strong Points</h2>
+            <ul>
+                {% for point in feedback.split('Strong Points:')[1].split('Suggestions:')[0].strip().split('- ') if point.strip() %}
+                    <li>{{ point.strip() }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Suggestions</h2>
+            <ul>
+                {% for suggestion in feedback.split('Suggestions:')[1].strip().split('- ') if suggestion.strip() %}
+                    <li>{{ suggestion.strip() }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <a href="{{ url_for('home') }}" class="button-86"><span class="text">← Back to Home</span></a>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 ScanMyResume. All rights reserved.</p>
+    </footer>
+</body>
+</html>

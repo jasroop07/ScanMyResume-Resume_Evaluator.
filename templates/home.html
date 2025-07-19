@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ScanMyResume📝 </title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;600&display=swap');
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Lora', serif;
+        background-color: #fffef7; /* cream-like background */
+        color: #222;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 2rem;
+    }
+
+    h1 {
+        font-size: 3rem;
+        color: #1a1a1a;
+        margin-bottom: 2rem;
+        font-weight: 600;
+    }
+
+    form {
+        background-color: #dedcce;
+        padding: 2.5rem;
+        border-radius: 16px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.07);
+        max-width: 600px;
+        width: 100%;
+    }
+
+    label {
+        font-weight: 600;
+        display: block;
+        margin: 1.5rem 0 0.75rem;
+        color: #444;
+    }
+
+    input[type="file"],
+    textarea {
+        width: 100%;
+        padding: 0.9rem 1rem;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-family: 'Lora', serif;
+        background-color: #fafafa;
+    }
+
+    textarea {
+        resize: vertical;
+        min-height: 160px;
+    }
+
+
+
+
+
+    footer {
+        margin-top: 2.5rem;
+        font-size: 0.9rem;
+        color: #777;
+        text-align: center;
+    }
+</style>
+
+</head>
+<body>
+    <div class="container">
+        <h1>ScanMyResume</h1>
+        <form action="{{ url_for('process_resume') }}" method="POST" enctype="multipart/form-data">
+            <label for="resume">Upload Resume (PDF format only)</label>
+            <input type="file" id="resume" name="resume" accept=".pdf" required>
+
+            <label for="job_description">Job Description</label>
+            <textarea id="job_description" name="job_description" placeholder="Paste the job description here..." required></textarea>
+
+            
+            <button class="button-86" type="submit"><span class="text">Scan Resume</span></button>
+
+        </form>
+        <footer>&copy; 2025 ScanMyResume. All rights reserved.</footer>
+    </div>
+</body>
+</html>

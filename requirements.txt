@@ -1,0 +1,14 @@
+flask
+google-generativeai
+python-dotenv
+pandas
+PyPDF2
+google.generativeai
+python-dotenv
+langchain
+langchain_groq
+langchain_openai
+langchain_community
+langchain_core
+joblib
+flask-wtf

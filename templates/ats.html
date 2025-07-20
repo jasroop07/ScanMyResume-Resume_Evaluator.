@@ -3,195 +3,605 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ title }}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Lora', serif;
-            color: #fff;
+            font-family: 'Inter', sans-serif;
+            background: #f8f6f3;
+            color: #2d2d2d;
+            min-height: 100vh;
             position: relative;
             overflow-x: hidden;
+            font-weight: 400;
+            line-height: 1.6;
         }
 
-        .background-blur {
+        /* Clean minimal background */
+        body::before {
+            content: '';
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: url("{{ url_for('static', filename='workspace.jpg') }}") no-repeat center center fixed;
-            background-size: cover;
-            filter: blur(5px);
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(139, 69, 19, 0.02) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(160, 82, 45, 0.015) 0%, transparent 50%);
             z-index: -1;
         }
 
-        .container {
-            max-width: 800px;
-            margin: 5rem auto;
-            padding: 2.5rem;
-            background-color: #542e1c;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(8px);
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-            color: #fff;
-            text-align: center;
-            font-weight: 700;
-        }
-
-        .section {
-            margin-bottom: 2rem;
-        }
-
-        .section h2 {
-            font-size: 1.4rem;
-            margin-bottom: 0.8rem;
-            color: #ffe6cc;
-        }
-
-        .section p {
-            font-size: 1rem;
-            background-color: #efebe9;
-            padding: 1rem;
-            border-radius: 10px;
-            line-height: 1.6;
-            color: #3e2723;
-        }
-
-        .section ul {
-            list-style-type: disc;
-            padding-left: 1.5rem;
-            background-color: #efebe9;
-            border-radius: 10px;
-            padding: 1rem;
-            color: #3e2723;
-        }
-
-        .section ul li {
-            margin-bottom: 0.6rem;
-            font-size: 1rem;
-        }
-
-        .button-86 {
-            font-family: 'Lora', serif;
-            font-size: 16px;
-            background: transparent;
-            border: none;
-            position: relative;
-            color: #fff;
-            cursor: pointer;
-            z-index: 10;
-            padding: 12px 24px;
-            display: inline-flex;
+        /* Clean Navigation */
+        .topbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.5rem 3rem;
+            background: rgba(248, 246, 243, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(45, 45, 45, 0.08);
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            border-radius: 10px;
+            z-index: 100;
+            animation: slideDown 0.8s ease-out;
         }
 
-        .button-86::after,
-        .button-86::before {
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .brand {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2d2d2d;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-features {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-features span {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: 400;
+            padding: 0.5rem 0;
+            transition: all 0.3s ease;
+            cursor: default;
+            position: relative;
+        }
+
+        .nav-features span:hover {
+            color: #2d2d2d;
+        }
+
+        .nav-features span::after {
             content: '';
             position: absolute;
             bottom: 0;
-            right: 0;
-            z-index: -1;
-            transition: all 0.4s;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: #2d2d2d;
+            transition: width 0.3s ease;
+        }
+
+        .nav-features span:hover::after {
+            width: 100%;
+        }
+
+        /* Main Layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 100vh;
+            padding-top: 5rem;
+        }
+
+        /* Left Section - Results Summary */
+        .left-section {
+            padding: 4rem 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            animation: fadeInLeft 0.8s ease-out;
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .results-icon {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #228b22 0%, #32cd32 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(34, 139, 34, 0.15);
+            animation: gentleBounce 3s ease-in-out infinite;
+        }
+
+        @keyframes gentleBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .results-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 600;
+            color: #2d2d2d;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+        }
+
+        .results-subtitle {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+            color: #666;
+            font-weight: 400;
+            line-height: 1.6;
+            max-width: 400px;
+            margin-bottom: 3rem;
+        }
+
+        /* Back Button */
+        .button-86 {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            background: #2d2d2d;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: fit-content;
+            position: relative;
+            overflow: hidden;
         }
 
         .button-86::before {
-            transform: translate(0%, 0%);
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
             width: 100%;
             height: 100%;
-            background: #1a1a1a;
-            border-radius: 10px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
         }
 
-        .button-86::after {
-            transform: translate(10px, 10px);
-            width: 35px;
-            height: 35px;
-            background: #ffffff15;
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            border-radius: 50px;
+        .button-86:hover {
+            background: #1a1a1a;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(45, 45, 45, 0.2);
         }
 
         .button-86:hover::before {
-            transform: translate(5%, 20%);
-            width: 110%;
-            height: 110%;
+            left: 100%;
         }
 
-        .button-86:hover::after {
-            border-radius: 10px;
-            transform: translate(0, 0);
-            width: 100%;
+        .text {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .text::before {
+            content: '←';
+            font-size: 1.1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .button-86:hover .text::before {
+            transform: translateX(-3px);
+        }
+
+        /* Right Section - Results Details */
+        .right-section {
+            padding: 4rem 3rem;
+            display: flex;
+            flex-direction: column;
+            animation: fadeInRight 0.8s ease-out 0.2s both;
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .results-container {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            padding: 3rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(45, 45, 45, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+        }
+
+        /* Section Styling */
+        .section {
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.8s ease-out both;
+        }
+
+        .section:nth-child(1) { animation-delay: 0.1s; }
+        .section:nth-child(2) { animation-delay: 0.2s; }
+        .section:nth-child(3) { animation-delay: 0.3s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #2d2d2d;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            letter-spacing: -0.01em;
+        }
+
+        .section h2::before {
+            font-size: 1.5rem;
+            opacity: 0.8;
+        }
+
+        .section:nth-child(1) h2::before { content: '🎯'; }
+        .section:nth-child(2) h2::before { content: '💪'; }
+        .section:nth-child(3) h2::before { content: '💡'; }
+
+        /* Content Styling */
+        .section p {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 400;
+            line-height: 1.7;
+            color: #4a4a4a;
+            background: #fff;
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid #e8e8e8;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .section p::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
             height: 100%;
+            background: linear-gradient(to bottom, #228b22, #32cd32);
+            border-radius: 2px 0 0 2px;
         }
 
-        .button-86:active::after {
-            transition: 0s;
-            transform: translate(0, 5%);
+        .section p:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(45, 45, 45, 0.08);
+            border-color: #d0d0d0;
         }
 
+        /* List Styling */
+        .section ul {
+            list-style: none;
+            padding: 0;
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid #e8e8e8;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .section ul:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(45, 45, 45, 0.08);
+            border-color: #d0d0d0;
+        }
+
+        .section ul li {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 400;
+            line-height: 1.7;
+            color: #4a4a4a;
+            margin-bottom: 1.25rem;
+            padding-left: 2rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .section ul li:last-child {
+            margin-bottom: 0;
+        }
+
+        .section ul li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 1.5rem;
+            height: 1.5rem;
+            background: linear-gradient(135deg, #228b22, #32cd32);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-top: 0.125rem;
+        }
+
+        .section ul li:hover {
+            color: #2d2d2d;
+            transform: translateX(5px);
+        }
+
+        /* Special styling for ATS Score section */
+        .section:first-child p {
+            background: linear-gradient(145deg, #f0fff0, #e6ffe6);
+            border-color: #32cd32;
+            font-weight: 500;
+            font-size: 1.2rem;
+        }
+
+        .section:first-child p::before {
+            background: linear-gradient(to bottom, #32cd32, #228b22);
+        }
+
+        /* Footer */
         footer {
-            margin-top: 2rem;
-            font-size: 0.9rem;
-            color: #eee;
-            text-align: center;
+            position: absolute;
+            bottom: 2rem;
+            left: 3rem;
+            color: #999;
+            font-size: 0.85rem;
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+                padding-top: 6rem;
+            }
+
+            .left-section,
+            .right-section {
+                padding: 2rem;
+            }
+
+            .topbar {
+                padding: 1rem 2rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-features {
+                gap: 1.5rem;
+            }
+
+            .results-title {
+                font-size: 2.5rem;
+                text-align: center;
+            }
+
+            .results-icon {
+                margin: 0 auto 2rem;
+            }
+
+            .results-subtitle {
+                text-align: center;
+                margin: 0 auto 3rem;
+            }
+
+            .button-86 {
+                margin: 0 auto;
+            }
+
+            footer {
+                position: static;
+                text-align: center;
+                margin-top: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .topbar {
+                padding: 1rem;
+            }
+
+            .brand {
+                font-size: 1.25rem;
+            }
+
+            .nav-features {
+                flex-wrap: wrap;
+                gap: 1rem;
+                justify-content: center;
+            }
+
+            .nav-features span {
+                font-size: 0.8rem;
+            }
+
+            .left-section,
+            .right-section {
+                padding: 1.5rem;
+            }
+
+            .results-title {
+                font-size: 2rem;
+            }
+
+            .results-container {
+                padding: 2rem;
+            }
+
+            .section h2 {
+                font-size: 1.5rem;
+            }
+
+            .section p,
+            .section ul li {
+                font-size: 1rem;
+            }
+
+            .results-icon {
+                width: 100px;
+                height: 100px;
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-layout {
+                padding-top: 8rem;
+            }
+
+            .left-section,
+            .right-section {
+                padding: 1rem;
+            }
+
+            .results-container {
+                padding: 1.5rem;
+            }
+
+            .results-title {
+                font-size: 1.75rem;
+            }
+
+            .section h2 {
+                font-size: 1.25rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .section p,
+            .section ul {
+                padding: 1.5rem;
+            }
+
+            .section ul li {
+                padding-left: 1.75rem;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Background Blur -->
-    <div class="background-blur"></div>
-
-    <!-- Main Content -->
-    <div class="container">
-        <h1>{{ title }}</h1>
-
-        <div class="section">
-            <h2>ATS Score</h2>
-            <p>
-                {{ feedback.split('Strong Points:')[0].replace('ATS Score:', '').strip() }}
-            </p>
+    <!-- Clean Navigation -->
+    <div class="topbar">
+        <div class="brand">ScanMyResume</div>
+        <div class="nav-features">
+            <span>Analysis Complete</span>
+            <span>Detailed Results</span>
+            <span>Actionable Insights</span>
+            <span>Ready to Improve</span>
         </div>
-
-        <div class="section">
-            <h2>Strong Points</h2>
-            <ul>
-                {% for point in feedback.split('Strong Points:')[1].split('Suggestions:')[0].strip().split('- ') if point.strip() %}
-                    <li>{{ point.strip() }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-
-        <div class="section">
-            <h2>Suggestions</h2>
-            <ul>
-                {% for suggestion in feedback.split('Suggestions:')[1].strip().split('- ') if suggestion.strip() %}
-                    <li>{{ suggestion.strip() }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-
-        <a href="{{ url_for('home') }}" class="button-86"><span class="text">← Back to Home</span></a>
     </div>
-
-    <footer>
-        <p>&copy; 2025 ScanMyResume. All rights reserved.</p>
-    </footer>
+    
+    <!-- Main Two-Column Layout -->
+    <div class="main-layout">
+        <!-- Left Section - Results Summary -->
+        <div class="left-section">
+            <div class="results-icon">📊</div>
+            <h1 class="results-title">{{ title }}</h1>
+            <p class="results-subtitle">
+                Your resume has been thoroughly analyzed using advanced AI algorithms. Review the detailed insights and recommendations below to optimize your application.
+            </p>
+            
+            <a href="{{ url_for('home') }}" class="button-86">
+                <span class="text">Back to Home</span>
+            </a>
+            
+            <footer>&copy; 2025 ScanMyResume. All rights reserved.</footer>
+        </div>
+        
+        <!-- Right Section - Results Details -->
+        <div class="right-section">
+            <div class="results-container">
+                <div class="section">
+                    <h2>ATS Score</h2>
+                    <p>{{ feedback.split('Strong Points:')[0].replace('ATS Score:', '').strip() }}</p>
+                </div>
+                
+                <div class="section">
+                    <h2>Strong Points</h2>
+                    <ul>
+                        {% for point in feedback.split('Strong Points:')[1].split('Suggestions:')[0].strip().split('- ') if point.strip() %}
+                        <li>{{ point.strip() }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                
+                <div class="section">
+                    <h2>Suggestions</h2>
+                    <ul>
+                        {% for suggestion in feedback.split('Suggestions:')[1].strip().split('- ') if suggestion.strip() %}
+                        <li>{{ suggestion.strip() }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

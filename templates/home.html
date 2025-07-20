@@ -2,100 +2,549 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>ScanMyResume📝 </title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>ScanMyResume📝</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;600&display=swap');
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-    * {
-        box-sizing: border-box;
-    }
+        body {
+            font-family: 'Source Sans 3', sans-serif;
+            background: linear-gradient(135deg, #fefefe 0%, #f7f8fc 50%, #f0f2f7 100%);
+            color: #2d3748;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            font-weight: 400;
+            line-height: 1.6;
+        }
 
-    body {
-        margin: 0;
-        padding: 0;
-        font-family: 'Lora', serif;
-        background-color: #fffef7; /* cream-like background */
-        color: #222;
-    }
+        /* Elegant minimalist background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.02) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(59, 130, 246, 0.02) 0%, transparent 50%);
+            animation: backgroundFloat 30s ease-in-out infinite;
+            z-index: -1;
+        }
 
-    .container {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-        padding: 2rem;
-    }
+        /* Subtle texture overlay */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 1px 1px, rgba(71, 85, 105, 0.015) 1px, transparent 0);
+            background-size: 20px 20px;
+            z-index: -1;
+            opacity: 0.4;
+        }
 
-    h1 {
-        font-size: 3rem;
-        color: #1a1a1a;
-        margin-bottom: 2rem;
-        font-weight: 600;
-    }
+        @keyframes backgroundFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-10px) rotate(0.3deg); }
+            66% { transform: translateY(5px) rotate(-0.3deg); }
+        }
 
-    form {
-        background-color: #dedcce;
-        padding: 2.5rem;
-        border-radius: 16px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.07);
-        max-width: 600px;
-        width: 100%;
-    }
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
 
-    label {
-        font-weight: 600;
-        display: block;
-        margin: 1.5rem 0 0.75rem;
-        color: #444;
-    }
+        /* Elegant Header Section */
+        .header-section {
+            text-align: center;
+            margin-bottom: 4rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
 
-    input[type="file"],
-    textarea {
-        width: 100%;
-        padding: 0.9rem 1rem;
-        border: 1px solid #ccc;
-        border-radius: 10px;
-        font-size: 1rem;
-        font-family: 'Lora', serif;
-        background-color: #fafafa;
-    }
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 600;
+            color: #1a202c;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
 
-    textarea {
-        resize: vertical;
-        min-height: 160px;
-    }
+        .title-main {
+            background: linear-gradient(135deg, #1a202c 0%, #4a5568 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
 
+        .title-main::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #6366f1, transparent);
+            border-radius: 1px;
+        }
 
+        .title-icon {
+            font-size: 0.8em;
+            animation: gentleBounce 3s ease-in-out infinite;
+            filter: drop-shadow(0 2px 8px rgba(99, 102, 241, 0.2));
+        }
 
+        @keyframes gentleBounce {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(2deg); }
+        }
 
+        .subtitle {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 1.125rem;
+            color: #718096;
+            font-weight: 400;
+            opacity: 0;
+            animation: fadeIn 1.2s ease-out 0.6s forwards;
+            letter-spacing: 0.3px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
 
-    footer {
-        margin-top: 2.5rem;
-        font-size: 0.9rem;
-        color: #777;
-        text-align: center;
-    }
-</style>
+        /* Elegant Form Styling */
+        form {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            padding: 3.5rem;
+            border-radius: 24px;
+            box-shadow: 
+                0 20px 60px rgba(26, 32, 44, 0.04),
+                0 0 0 1px rgba(255, 255, 255, 0.9),
+                inset 0 1px 0 rgba(255, 255, 255, 1);
+            max-width: 680px;
+            width: 100%;
+            animation: slideInUp 0.9s ease-out 0.4s both;
+            border: 1px solid rgba(226, 232, 240, 0.3);
+        }
 
+        .form-group {
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        label {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: 'Source Sans 3', sans-serif;
+            font-weight: 500;
+            color: #2d3748;
+            margin-bottom: 1.25rem;
+            font-size: 1.125rem;
+            letter-spacing: 0.2px;
+        }
+
+        .label-icon {
+            font-size: 1.25rem;
+            opacity: 0.8;
+        }
+
+        .label-subtitle {
+            font-size: 0.875rem;
+            color: #a0aec0;
+            font-weight: 400;
+            margin-left: auto;
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: 0.5px;
+        }
+
+        /* Refined File Upload */
+        .file-upload-wrapper {
+            position: relative;
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        input[type="file"] {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-upload-display {
+            border: 1.5px dashed #e2e8f0;
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            text-align: center;
+            background: linear-gradient(145deg, #fefefe, #f7f8fc);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .file-upload-display::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.05), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .file-upload-wrapper:hover .file-upload-display {
+            border-color: #6366f1;
+            background: linear-gradient(145deg, #fafaff, #f0f0ff);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(99, 102, 241, 0.08);
+        }
+
+        .file-upload-wrapper:hover .file-upload-display::before {
+            left: 100%;
+        }
+
+        .upload-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            animation: gentleFloat 4s ease-in-out infinite;
+            color: #6366f1;
+            opacity: 0.8;
+        }
+
+        @keyframes gentleFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+        }
+
+        .upload-text {
+            display: block;
+            color: #4a5568;
+            font-weight: 500;
+            font-size: 1rem;
+            font-family: 'Source Sans 3', sans-serif;
+        }
+
+        .file-name {
+            display: block;
+            margin-top: 0.75rem;
+            color: #6366f1;
+            font-weight: 600;
+            font-size: 0.9rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Elegant Textarea */
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 1.5rem;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 20px;
+            font-size: 1rem;
+            font-family: 'Source Sans 3', sans-serif;
+            background: linear-gradient(145deg, #fefefe, #f7f8fc);
+            resize: vertical;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            line-height: 1.7;
+            color: #2d3748;
+            font-weight: 400;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #6366f1;
+            background: linear-gradient(145deg, #fafaff, #f0f0ff);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.06);
+            transform: translateY(-2px);
+        }
+
+        textarea::placeholder {
+            color: #a0aec0;
+            font-style: italic;
+            font-weight: 300;
+        }
+
+        /* Sophisticated Button */
+        .button-86 {
+            width: 100%;
+            padding: 1.5rem 2.5rem;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 1.125rem;
+            font-weight: 500;
+            font-family: 'Source Sans 3', sans-serif;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 12px 40px rgba(99, 102, 241, 0.2);
+            letter-spacing: 0.3px;
+        }
+
+        .button-86::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .button-86:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.3);
+            background: linear-gradient(135deg, #5b5bd6 0%, #7c3aed 100%);
+        }
+
+        .button-86:hover::before {
+            left: 100%;
+        }
+
+        .button-86:active {
+            transform: translateY(-2px);
+        }
+
+        .text {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .text::before {
+            content: '✨';
+            font-size: 1.25rem;
+            animation: gentlePulse 3s ease-in-out infinite;
+        }
+
+        @keyframes gentlePulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+
+        /* Refined Footer */
+        footer {
+            margin-top: 4rem;
+            animation: fadeIn 1.2s ease-out 1.2s both;
+            text-align: center;
+        }
+
+        .footer-content {
+            color: #718096;
+        }
+
+        .footer-content p {
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            font-family: 'Source Sans 3', sans-serif;
+            font-weight: 400;
+        }
+
+        .footer-features {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            font-size: 0.875rem;
+        }
+
+        .footer-features span {
+            padding: 0.75rem 1.5rem;
+            background: rgba(99, 102, 241, 0.04);
+            border-radius: 25px;
+            color: #6366f1;
+            font-weight: 500;
+            font-family: 'Source Sans 3', sans-serif;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            letter-spacing: 0.2px;
+        }
+
+        .footer-features span:hover {
+            background: rgba(99, 102, 241, 0.08);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.15);
+        }
+
+        /* Elegant accent lines */
+        .form-group::before {
+            content: '';
+            position: absolute;
+            left: -15px;
+            top: 0;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(to bottom, #6366f1, #8b5cf6);
+            border-radius: 1px;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .form-group:hover::before {
+            opacity: 0.3;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem;
+            }
+            
+            form {
+                padding: 2.5rem;
+                margin: 1rem;
+            }
+            
+            h1 {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .footer-features {
+                gap: 1.5rem;
+            }
+            
+            .footer-features span {
+                font-size: 0.8rem;
+                padding: 0.6rem 1.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            form {
+                padding: 2rem;
+            }
+            
+            .file-upload-display {
+                padding: 2.5rem 1.5rem;
+            }
+            
+            .footer-features {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+        }
+
+        /* Focus states */
+        input[type="file"]:focus + .file-upload-display {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.06);
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>ScanMyResume</h1>
+        <div class="header-section">
+            <h1>
+                <span class="title-icon">📄</span>
+                <span class="title-main">ScanMyResume</span>
+            </h1>
+            <p class="subtitle">Intelligent resume analysis with professional insights and ATS optimization</p>
+        </div>
+        
         <form action="{{ url_for('process_resume') }}" method="POST" enctype="multipart/form-data">
-            <label for="resume">Upload Resume (PDF format only)</label>
-            <input type="file" id="resume" name="resume" accept=".pdf" required>
+            <div class="form-group">
+                <label for="resume">
+                    <span class="label-icon">📎</span>
+                    Resume Document
+                    <span class="label-subtitle">PDF only</span>
+                </label>
+                <div class="file-upload-wrapper">
+                    <input type="file" id="resume" name="resume" accept=".pdf" required>
+                    <div class="file-upload-display">
+                        <div class="upload-icon">📋</div>
+                        <span class="upload-text">Select your resume or drag & drop</span>
+                        <span class="file-name"></span>
+                    </div>
+                </div>
+            </div>
 
-            <label for="job_description">Job Description</label>
-            <textarea id="job_description" name="job_description" placeholder="Paste the job description here..." required></textarea>
+            <div class="form-group">
+                <label for="job_description">
+                    <span class="label-icon">💼</span>
+                    Job Description
+                    <span class="label-subtitle">Full posting</span>
+                </label>
+                <textarea id="job_description" name="job_description" placeholder="Paste the complete job description here..." required></textarea>
+            </div>
 
-            
-            <button class="button-86" type="submit"><span class="text">Scan Resume</span></button>
-
+            <button class="button-86" type="submit">
+                <span class="text">Analyze Resume</span>
+            </button>
         </form>
-        <footer>&copy; 2025 ScanMyResume. All rights reserved.</footer>
+
+        <footer>
+            <div class="footer-content">
+                <p>&copy; 2025 ScanMyResume. Crafted with precision.</p>
+                <div class="footer-features">
+                    <span>ATS Compatibility</span>
+                    <span>Match Analysis</span>
+                    <span>Enhancement Tips</span>
+                    <span>Instant Results</span>
+                </div>
+            </div>
+        </footer>
     </div>
 </body>
 </html>

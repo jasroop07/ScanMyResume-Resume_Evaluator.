@@ -3,35 +3,552 @@
 <head>
     <meta charset="UTF-8">
     <title>ScanMyResume📝</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8f6f3;
+            color: #2d2d2d;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+
+        /* Clean minimal background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(139, 69, 19, 0.02) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(160, 82, 45, 0.015) 0%, transparent 50%);
+            z-index: -1;
+        }
+
+        /* Blurred background */
+        .background-blur {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            filter: blur(5px);
+            z-index: -2;
+            opacity: 0.05;
+        }
+
+        /* Clean Navigation */
+        .topbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.5rem 3rem;
+            background: rgba(248, 246, 243, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(45, 45, 45, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .brand {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2d2d2d;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-features {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-features span {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: 400;
+            padding: 0.5rem 0;
+            transition: all 0.3s ease;
+            cursor: default;
+            position: relative;
+        }
+
+        .nav-features span:hover {
+            color: #2d2d2d;
+        }
+
+        .nav-features span::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: #2d2d2d;
+            transition: width 0.3s ease;
+        }
+
+        .nav-features span:hover::after {
+            width: 100%;
+        }
+
+        /* Main Layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 100vh;
+            padding-top: 5rem;
+        }
+
+        /* Left Section - Profile Style */
+        .left-section {
+            padding: 4rem 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            animation: fadeInLeft 0.8s ease-out;
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .profile-icon {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #8b4513 0%, #a0522d 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(139, 69, 19, 0.15);
+            animation: gentleBounce 3s ease-in-out infinite;
+        }
+
+        @keyframes gentleBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .main-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 600;
+            color: #2d2d2d;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+        }
+
+        .subtitle {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+            color: #666;
+            font-weight: 400;
+            line-height: 1.6;
+            max-width: 400px;
+        }
+
+        /* Right Section - Form */
+        .right-section {
+            padding: 4rem 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            animation: fadeInRight 0.8s ease-out 0.2s both;
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .form-header {
+            margin-bottom: 3rem;
+        }
+
+        .form-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: #2d2d2d;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        .form-subtitle {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            color: #666;
+            font-weight: 400;
+        }
+
+        /* Form Styling */
+        form {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            padding: 3rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(45, 45, 45, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        label {
+            display: block;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            color: #2d2d2d;
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+            letter-spacing: 0.01em;
+        }
+
+        /* File Input Styling */
+        input[type="file"] {
+            width: 100%;
+            padding: 1.25rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            background: #fff;
+            transition: all 0.3s ease;
+            color: #2d2d2d;
+            cursor: pointer;
+        }
+
+        input[type="file"]:focus {
+            outline: none;
+            border-color: #8b4513;
+            box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.1);
+        }
+
+        input[type="file"]:hover {
+            border-color: #8b4513;
+            box-shadow: 0 2px 8px rgba(139, 69, 19, 0.1);
+        }
+
+        input[type="file"]::file-selector-button {
+            background: #2d2d2d;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            margin-right: 1rem;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        input[type="file"]::file-selector-button:hover {
+            background: #1a1a1a;
+        }
+
+        /* Textarea Styling */
+        textarea {
+            width: 100%;
+            min-height: 180px;
+            padding: 1.25rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            background: #fff;
+            resize: vertical;
+            transition: all 0.3s ease;
+            line-height: 1.6;
+            color: #2d2d2d;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #8b4513;
+            box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.1);
+        }
+
+        textarea::placeholder {
+            color: #999;
+            font-style: italic;
+        }
+
+        /* Button Styling */
+        .button-86 {
+            width: 100%;
+            padding: 1.25rem 2rem;
+            background: #2d2d2d;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .button-86::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .button-86:hover {
+            background: #1a1a1a;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(45, 45, 45, 0.2);
+        }
+
+        .button-86:hover::before {
+            left: 100%;
+        }
+
+        .text {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .text::before {
+            content: '→';
+            font-size: 1.1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .button-86:hover .text::before {
+            transform: translateX(3px);
+        }
+
+        /* Footer */
+        footer {
+            position: absolute;
+            bottom: 2rem;
+            left: 3rem;
+            color: #999;
+            font-size: 0.85rem;
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+                padding-top: 6rem;
+            }
+
+            .left-section,
+            .right-section {
+                padding: 2rem;
+            }
+
+            .topbar {
+                padding: 1rem 2rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-features {
+                gap: 1.5rem;
+            }
+
+            .main-title {
+                font-size: 2.5rem;
+                text-align: center;
+            }
+
+            .form-title {
+                font-size: 2rem;
+            }
+
+            .profile-icon {
+                margin: 0 auto 2rem;
+            }
+
+            footer {
+                position: static;
+                text-align: center;
+                margin-top: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .topbar {
+                padding: 1rem;
+            }
+
+            .brand {
+                font-size: 1.25rem;
+            }
+
+            .nav-features {
+                flex-wrap: wrap;
+                gap: 1rem;
+                justify-content: center;
+            }
+
+            .nav-features span {
+                font-size: 0.8rem;
+            }
+
+            .left-section,
+            .right-section {
+                padding: 1.5rem;
+            }
+
+            .main-title {
+                font-size: 2rem;
+            }
+
+            .form-title {
+                font-size: 1.75rem;
+            }
+
+            form {
+                padding: 2rem;
+            }
+
+            .profile-icon {
+                width: 100px;
+                height: 100px;
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-layout {
+                padding-top: 8rem;
+            }
+
+            .left-section,
+            .right-section {
+                padding: 1rem;
+            }
+
+            form {
+                padding: 1.5rem;
+            }
+
+            .main-title {
+                font-size: 1.75rem;
+            }
+
+            .form-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Blurred background -->
     <div class="background-blur"></div>
-
-    <!-- Topbar with logo only -->
+    
+    <!-- Clean Navigation -->
     <div class="topbar">
-        <div class="left-section">
-            <img src="{{ url_for('static', filename='resume_logo.png') }}" alt="Logo" class="logo-img">
+        <div class="brand">ScanMyResume</div>
+        <div class="nav-features">
+            <span>ATS Compatibility</span>
+            <span>Match Analysis</span>
+            <span>Enhancement Tips</span>
+            <span>Instant Results</span>
         </div>
-        <div class="tagline">Smart resume analysis for every job seeker</div>
     </div>
-
-    <!-- Form container -->
-    <div class="container">
-        <form action="{{ url_for('process_resume') }}" method="POST" enctype="multipart/form-data">
-            <div style="text-align: center; font-size: 2.5rem; margin-bottom: 1rem;">📄</div>
-
-            <label for="resume">Upload Resume (PDF format only)</label>
-            <input type="file" id="resume" name="resume" accept=".pdf" required>
-
-            <label for="job_description">Job Description</label>
-            <textarea id="job_description" name="job_description" placeholder="Paste the job description here..." required></textarea>
-
-            <button class="button-86" type="submit"><span class="text">Scan Resume</span></button>
-        </form>
-        <footer>&copy; 2025 ScanMyResume. All rights reserved.</footer>
+    
+    <!-- Main Two-Column Layout -->
+    <div class="main-layout">
+        <!-- Left Section - Profile Style -->
+        <div class="left-section">
+            <div class="profile-icon">📝</div>
+            <h1 class="main-title">Professional Resume Analysis</h1>
+            <p class="subtitle">
+                Advanced AI-powered resume scanning and optimization tool designed to help job seekers improve their applications and increase their chances of success.
+            </p>
+            <footer>&copy; 2025 ScanMyResume. All rights reserved.</footer>
+        </div>
+        
+        <!-- Right Section - Form -->
+        <div class="right-section">
+            <div class="form-header">
+                <h2 class="form-title">Get Started with Your Analysis</h2>
+                <p class="form-subtitle">Upload your resume and job description to receive detailed insights</p>
+            </div>
+            
+            <form action="{{ url_for('process_resume') }}" method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="resume">Upload Resume (PDF format only)</label>
+                    <input type="file" id="resume" name="resume" accept=".pdf" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="job_description">Job Description</label>
+                    <textarea id="job_description" name="job_description" placeholder="Paste the job description here..." required></textarea>
+                </div>
+                
+                <button class="button-86" type="submit">
+                    <span class="text">Analyze Resume</span>
+                </button>
+            </form>
+        </div>
     </div>
 </body>
 </html>

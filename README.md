@@ -6,7 +6,7 @@ ScanMyResume is an AI-powered resume screening tool that uses the LLaMA language
 
 ## Demo
 
-![Demo](images/jasroop singh's Video - Jul 22, 2025-VEED.gif)
+![Demo](images/demo.gif)
 
 
 

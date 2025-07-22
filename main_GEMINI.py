@@ -68,11 +68,11 @@ Only output the structured string, no extra commentary.
 
 
 
-# Example usage
-resume="/Users/jasroopsingh/Desktop/resume_ats/jasroop_final_resume (1) (1).pdf"
-job_description="""We are looking for a passionate and results-driven Data Scientist to join our AI research and development team. You will work closely with data engineers, ML engineers, and product managers to build predictive models and extract actionable insights from structured and unstructured datasets.
-"""
-feedback = get_ats_feedback_GEMINI(resume, job_description)
-#print(feedback)
+# # Example usage
+# resume="/Users/jasroopsingh/Desktop/resume_ats/jasroop_final_resume (1) (1).pdf"
+# job_description="""We are looking for a passionate and results-driven Data Scientist to join our AI research and development team. You will work closely with data engineers, ML engineers, and product managers to build predictive models and extract actionable insights from structured and unstructured datasets.
+# """
+# feedback = get_ats_feedback_GEMINI(resume, job_description)
+# #print(feedback)
 
 
